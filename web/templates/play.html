@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Play{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Pizza Blaster</h1>
+    <h2>Hi {{ name }}! Play now!</h2>
+    <p>This is where the pizza picture goes. Also the timer stuff.</p>
+    <form method="post" action="/submit/{{ play_id }}">
+      <p>
+        <input type="time" name="score" placeholder="Your time" />
+      </p>
+      <p>
+        <input type="submit" value="Submit" />
+      </p>
+    </form>
+{% endblock %}

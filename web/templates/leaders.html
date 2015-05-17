@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Global Leaderboard{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+
+{% block content %}
+  <h1>Pizza Blaster</h1>
+  <h2>Global Leaderboard</h2>
+  <ol>
+    {% for user in users %}
+      <li>{% if user.image %}<img src="/image/{{ user.image }}">{% endif %}{{user.name}}: {{user.score}} seconds</li>
+    {% endfor %}
+  </ol>
+{% endblock %}

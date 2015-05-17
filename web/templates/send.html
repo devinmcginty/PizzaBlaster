@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Sign Up{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Pizza Blaster</h1>
+    <h2>Secret Send Email Page</h2>
+    <form method="post">
+      <p>
+        <input type="submit" value="Send Email to {{ email }}" />
+      </p>
+    </form>
+{% endblock %}
