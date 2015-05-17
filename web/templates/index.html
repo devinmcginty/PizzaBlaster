@@ -1,24 +1,8 @@
 {% extends "base.html" %}
-{% block title %}Sign Up{% endblock %}
-{% block head %}
-    {{ super() }}
-    <style type="text/css">
-        .important { color: #336699; }
-    </style>
-{% endblock %}
+{% block title %}Pizza Blaster{% endblock %}
 
 {% block content %}
-    <h2>Welcome to Pizza Blaster. Have you played before?</h2>
-    <form method="post" enctype="multipart/form-data" action="{{ upload_url }}">
-      <p>
-        <a href="/sorry">
-          <div class="playbutton">Yes</div>
-        </a>
-      </p>
-      <p>
-        <a href="/signup">
-          <div class="playbutton">No</div>
-        </a>
-      </p>
-    </form>
+    <h1>PIZZA BLASTER</h1>
+    <h2>A Game For Young People</h2>
+    <a href="/choice">I'm Ready!</a>
 {% endblock %}
