@@ -6,12 +6,12 @@
         <param name="onload" value="true" />
     </feature>
     <allow-intent href="market:*" />
-    <name>Hello World</name>
+    <name>Pizza Blaster</name>
     <description>
-        Hello World sample application that responds to the deviceready event.
+        A game for young people
     </description>
-    <author email="support@phonegap.com" href="http://phonegap.com">
-        PhoneGap Team
+    <author email="dlm348@drexel.edu" href="http://pizzablaster.website">
+        Pizza Blaster Team
     </author>
     <content src="index.html" />
     <preference name="permissions" value="none" />
