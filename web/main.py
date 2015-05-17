@@ -18,6 +18,8 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 ONE_DAY = timedelta(days=1)
 VERIFICATION_CODE = '00023'
 
+
+
 class IndexPage(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('index.html')
