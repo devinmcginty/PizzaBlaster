@@ -11,10 +11,14 @@
     <h2>Welcome to Pizza Blaster. Have you played before?</h2>
     <form method="post" enctype="multipart/form-data" action="{{ upload_url }}">
       <p>
-        <a href="/sorry">Yes</a>
+        <a href="/sorry">
+          <div class="playbutton">Yes</div>
+        </a>
       </p>
       <p>
-        <a href="/signup">No</a>
+        <a href="/signup">
+          <div class="playbutton">No</div>
+        </a>
       </p>
     </form>
 {% endblock %}
