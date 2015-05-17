@@ -153,9 +153,9 @@ class PlayPage(webapp2.RequestHandler):
         now = datetime.utcnow()
         delta = user.email_date - now
 
-        if delta > ONE_DAY:
-            self.response.write("too late!")
-            return
+        # if delta > ONE_DAY:
+        #     self.response.write("too late!")
+        #     return
 
         user.play_start = now
         user.put()
@@ -168,7 +168,7 @@ class PlaySubmitPage(webapp2.RequestHandler):
         user = User.query(User.play_id == play_id, User.score == None).get()
 
         if user is None:
-            self.response.write("invalid user")
+            self.redirect('/leaders')
             return
 
         time = self.request.get('score')
