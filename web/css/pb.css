@@ -1,3 +1,38 @@
+h1, h2 {
+    text-align: center;
+}
+h1 {
+    font-size: 32px;
+}
+h2 {
+    font-size: 24px;
+}
+
+.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .playbutton {
     border: 1px solid black;
+}
+
+.leaderboardItem {
+    margin: 10px;
+    width: auto;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.playerPic {
+    display: none;
+    margin: 0;
+    height: 100px;
+    width: 100px;
+    border: 1px solid black;
+}
+
+.playerScore {
+    margin-left: 20px;
 }

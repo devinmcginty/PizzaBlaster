@@ -11,7 +11,9 @@
   <h2>Global Leaderboard</h2>
   <ol>
     {% for user in users %}
-      <li>{% if user.image %}<img src="/image/{{ user.image }}">{% endif %}{{user.name}}: {{user.score}} seconds</li>
+      <li><div class="leaderboardItem">
+        {% if user.image %}<img src="/image/{{ user.image }}" class="playerPic">{% endif %} <span class="playerScore">{{user.name}}: {{user.score}}</span>
+      </div></li>
     {% endfor %}
   </ol>
 {% endblock %}
