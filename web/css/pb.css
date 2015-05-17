@@ -47,6 +47,20 @@ a {
     width: 100px;
 }
 
+/* signup.html */
+
+.signupContainer {
+    padding: 15px;
+}
+
+.uploadButton {
+    width: 200px;
+}
+
+.signupPadding {
+    padding: 10px;
+}
+
 /* play.html */
 
 .gameContainer {
