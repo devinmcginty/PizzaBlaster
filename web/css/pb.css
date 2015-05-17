@@ -39,6 +39,12 @@ a:link {
     width: 120px;
 }
 
+/* choice.html */
+
+.binaryButton {
+    width: 100px;
+}
+
 /* play.html */
 
 .gameContainer {
