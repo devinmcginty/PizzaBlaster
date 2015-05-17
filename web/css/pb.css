@@ -8,18 +8,6 @@ h2 {
     font-size: 24px;
 }
 
-.gameContainer {
-    margin: 10px;
-    width: 100%;
-}
-
-.pizza {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 80%;
-    height: auto;
-}
 
 .logo {
     display: block;
@@ -28,6 +16,50 @@ h2 {
     width: 120px;
     height: 120px;
 }
+
+.invisible {
+    display: none;
+}
+
+.button {
+    text-align: center;
+    background-color: red;
+    border: 2px solid black;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px;
+}
+
+/* play.html */
+
+.gameContainer {
+    margin: 10px;
+    width: 100%;
+}
+
+.pizza {
+    /*display: none;*/
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    height: auto;
+}
+
+.timer {}
+#timetext {}
+
+.doneButton {
+    width: 180px;
+}
+
+.submitScore {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
 
 .playbutton {
     border: 1px solid black;

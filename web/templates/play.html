@@ -2,22 +2,47 @@
 {% block title %}Play{% endblock %}
 
 {% block content %}
-    <h2>Hi {{ name }}! Play now!</h2>
+    <!-- <h2>Hi {{ name }}! Play now!</h2> -->
+    <style type="text/css">
+    .logo {
+      display: none;
+    }
+    </style>
     <div class="gameContainer">
+
+      <h2 class="afterGame invisible">Enter your time.</h2>
 
       <img src="/images/the_picture_of_the_pizza.jpg" class="pizza"/>
 
-      <p>This is where the pizza picture goes. Also the timer stuff.</p>
-      <form method="post" action="/submit/{{ play_id }}">
-        <p>
-          <input type="time" name="score" placeholder="Your time" />
-        </p>
-        <p>
-          <input type="submit" value="Submit" />
-        </p>
-      </form>
+      <div class="timer"><h1 id="timetext"></div>
+
+      <div class="button doneButton">I'm done.</div>
+
+      <div class="submitScore afterGame invisible">
+        <form method="post" action="/submit/{{ play_id }}">
+          <p>
+            <input type="time" name="score" placeholder="Your time" />
+          </p>
+          <p>
+            <input type="submit" value="Submit" />
+          </p>
+        </form>
+      </div>
     </div>
+
+    <script type="text/javascript" src="/js/play.js"></script>
     <script type="text/javascript">
+    $(window).load(function() {
+      runTimer();
+    });
+
+
+    $(".doneButton").click(function() {
+      clearTimeout(t);
+      $(".pizza").addClass("invisible");
+      $(".doneButton").addClass("invisible");
+      $(".afterGame").removeClass("invisible");
+    });
 
     </script>
 {% endblock %}
