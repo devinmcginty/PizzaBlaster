@@ -149,3 +149,8 @@ a {
 .playerScore {
     margin-left: 5px;
 }
+
+.scoreTime {
+  float: right;
+  margin-right: 5px;
+}
