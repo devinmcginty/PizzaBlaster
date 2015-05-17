@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Have you played?{% endblock %}
+
+{% block content %}
+    <h2>Welcome to Pizza Blaster. Have you played before?</h2>
+    <form method="post" enctype="multipart/form-data" action="{{ upload_url }}">
+      <p>
+        <a href="/sorry">
+          <div class="playbutton">Yes</div>
+        </a>
+      </p>
+      <p>
+        <a href="/signup">
+          <div class="playbutton">No</div>
+        </a>
+      </p>
+    </form>
+{% endblock %}

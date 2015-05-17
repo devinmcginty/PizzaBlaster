@@ -22,11 +22,26 @@ class IndexPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render())
 
+class ChoicePage(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('choice.html')
+        self.response.write(template.render())
+
 class SignupPage(webapp2.RequestHandler):
     def get(self):
         upload_url = blobstore.create_upload_url('/signup/submit')
         template = JINJA_ENVIRONMENT.get_template('signup.html')
         self.response.write(template.render({'upload_url': upload_url}))
+
+class SignupSuccessPage(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('signup_success.html')
+        self.response.write(template.render())
+
+class SorryPage(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('sorry.html')
+        self.response.write(template.render())
 
 class SignupHandler(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
@@ -48,7 +63,7 @@ class SignupHandler(blobstore_handlers.BlobstoreUploadHandler):
 
         user.put()
 
-        self.redirect("/")
+        self.redirect('/signup/success')
 
 class PlayPage(webapp2.RequestHandler):
     def get(self, play_id):
@@ -147,7 +162,7 @@ Click this link: %s
 """ % (user.name, play_link)
 
         mail.send_mail("adrienip@gmail.com", address, subject, body)
-        self.response.write("Sent! <p> " + address + "<p>" + body)
+        self.response.write("Sent! <p> " + address + "<p>" + body + "<p>" + play_link)
 
 
 class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
@@ -159,7 +174,10 @@ class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
 
 
 app = webapp2.WSGIApplication([('/', IndexPage),
+                               ('/choice', ChoicePage),
+                               ('/sorry', SorryPage),
                                ('/signup', SignupPage),
+                               ('/signup/success', SignupSuccessPage),
                                ('/signup/submit', SignupHandler),
                                ('/image/([^/]+)?', ImageHandler),
                                ('/play/([^/]+)?', PlayPage),
