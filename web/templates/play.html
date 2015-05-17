@@ -3,13 +3,21 @@
 
 {% block content %}
     <h2>Hi {{ name }}! Play now!</h2>
-    <p>This is where the pizza picture goes. Also the timer stuff.</p>
-    <form method="post" action="/submit/{{ play_id }}">
-      <p>
-        <input type="time" name="score" placeholder="Your time" />
-      </p>
-      <p>
-        <input type="submit" value="Submit" />
-      </p>
-    </form>
+    <div class="gameContainer">
+
+      <img src="/images/the_picture_of_the_pizza.jpg" class="pizza"/>
+
+      <p>This is where the pizza picture goes. Also the timer stuff.</p>
+      <form method="post" action="/submit/{{ play_id }}">
+        <p>
+          <input type="time" name="score" placeholder="Your time" />
+        </p>
+        <p>
+          <input type="submit" value="Submit" />
+        </p>
+      </form>
+    </div>
+    <script type="text/javascript">
+
+    </script>
 {% endblock %}
