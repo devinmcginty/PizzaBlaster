@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from google.appengine.api import mail
 from time import sleep
 import pytz
+import urllib
 
 from pizzablaster.models import User
 
@@ -217,7 +218,8 @@ class SendPage(webapp2.RequestHandler):
 
         user.put()
 
-        play_link = "http://pizza-blaster.appspot.com/go/%s" % user.play_id
+        play_link_text = "http://pizza-blaster.appspot.com/go/%s" % user.play_id
+        play_link = "pizza://whatever?" + urllib.urlencode({'page': play_link_text})
         verification_code = '00023'
         expiration_date = (datetime.now(EASTERN) + ONE_HOUR).strftime("%I:%M %p on %b %d, %Y")
 
@@ -229,6 +231,7 @@ class SendPage(webapp2.RequestHandler):
         html = template.render({
             'name': user.name,
             'play_link': play_link,
+            'play_link_text': play_link_text,
             'verification_code': verification_code,
             'expiration_date': expiration_date
         })
