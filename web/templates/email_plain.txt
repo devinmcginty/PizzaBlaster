@@ -1,0 +1,11 @@
+Congratulations, {{ name }}.
+
+Your chance to play Pizza Blaster is now.
+
+Click the link below and enter your code to begin.
+
+{{ play_link }}
+
+Verification Code: {{ verification_code }}
+
+Reminder: this code will expire at {{ expiration_date }}. You get only one chance.
