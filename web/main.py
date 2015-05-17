@@ -7,6 +7,7 @@ import uuid
 from datetime import datetime, timedelta
 from google.appengine.api import mail
 from time import sleep
+import pytz
 
 from pizzablaster.models import User
 
@@ -16,8 +17,9 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 ONE_DAY = timedelta(days=1)
+ONE_HOUR = timedelta(hours=1)
 VERIFICATION_CODE = '00023'
-
+EASTERN = pytz.timezone('US/Eastern')
 
 
 class IndexPage(webapp2.RequestHandler):
@@ -168,24 +170,32 @@ class SendPage(webapp2.RequestHandler):
 
         user.put()
 
-        play_link = "http://localhost:8080/go/%s" % user.play_id
+        play_link = "http://pizza-blaster.appspot.com/go/%s" % user.play_id
         verification_code = '00023'
+        expiration_date = (datetime.now(EASTERN) + ONE_HOUR).strftime("%I:%M %p on %b %d, %Y")
 
         address = "%s <%s>" % (user.name, user.email)
 
         subject = "It's time to play Pizza Blaster"
-        body = """
-Congratulations, %s!
 
-It's your turn to play Pizza Blaster.
+        template = JINJA_ENVIRONMENT.get_template('email.html')
+        html = template.render({
+            'name': user.name,
+            'play_link': play_link,
+            'verification_code': verification_code,
+            'expiration_date': expiration_date
+        })
 
-Click this link: %s
+        template = JINJA_ENVIRONMENT.get_template('email_plain.txt')
+        body = template.render({
+            'name': user.name,
+            'play_link': play_link,
+            'verification_code': verification_code,
+            'expiration_date': expiration_date
+        })
 
-Verification Code: %s
-""" % (user.name, play_link, verification_code)
-
-        mail.send_mail("adrienip@gmail.com", address, subject, body)
-        self.response.write("Sent! <p> " + address + "<p>" + body + "<p>" + play_link)
+        mail.send_mail("admin@pizza-blaster.appspot.com", address, subject, body, html=html)
+        self.response.write("Sent! <p> " + address + "<p>" + html + "<p>" + play_link)
 
 
 class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
