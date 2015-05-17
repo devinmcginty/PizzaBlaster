@@ -54,7 +54,7 @@ def timeToSecs(time):
 
     score_seconds = score_delta.total_seconds()
 
-    return score_seconds
+    return int(score_seconds)
 
 
 class IndexPage(webapp2.RequestHandler):
