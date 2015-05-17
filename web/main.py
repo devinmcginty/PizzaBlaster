@@ -164,7 +164,7 @@ class PlaySubmitPage(webapp2.RequestHandler):
 
 class LeadersPage(webapp2.RequestHandler):
     def get(self):
-        users = User.query(User.score > 0).order(-User.score).fetch(5)
+        users = User.query(User.score > 0).order(-User.score).fetch(20)
 
         render_users = map(userModelToLeaderboardUser, users)
 
