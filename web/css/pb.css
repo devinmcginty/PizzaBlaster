@@ -31,6 +31,8 @@ a:link {
     margin-left: auto;
     margin-right: auto;
     padding: 5px;
+    color: white;
+    border-radius: 5px;
 }
 
 /* index.html */

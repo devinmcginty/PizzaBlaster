@@ -84,9 +84,9 @@ class VerifyPage(webapp2.RequestHandler):
 
 class SignupPage(webapp2.RequestHandler):
     def get(self):
-        upload_url = blobstore.create_upload_url('/signup/submit')
+        # upload_url = blobstore.create_upload_url('/signup/submit')
         template = JINJA_ENVIRONMENT.get_template('signup.html')
-        self.response.write(template.render({'upload_url': upload_url}))
+        self.response.write(template.render({'upload_url': '/signup/submit'}))
 
 class SignupSuccessPage(webapp2.RequestHandler):
     def get(self):
@@ -98,7 +98,21 @@ class SorryPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('sorry.html')
         self.response.write(template.render())
 
-class SignupHandler(blobstore_handlers.BlobstoreUploadHandler):
+class SignupHandler(webapp2.RequestHandler):
+    def post(self):
+        email = self.request.get('email')
+        name = self.request.get('name')
+
+        user = User(
+            email=email,
+            name=name
+        )
+
+        user.put()
+
+        self.redirect('/signup/success')
+
+class SignupHandlerBlob(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         image_key = None
         try:
@@ -126,7 +140,7 @@ class PlayPage(webapp2.RequestHandler):
 
         if user is None:
             template = JINJA_ENVIRONMENT.get_template('play.html')
-            self.response.write(template.render({'name': 'not a person', 'play_id': play_id}))
+            self.response.write(template.render({'name': 'Alec', 'play_id': play_id}))
             # self.response.write("invalid user")
             return
 
@@ -227,7 +241,7 @@ class SendPage(webapp2.RequestHandler):
             'expiration_date': expiration_date
         })
 
-        mail.send_mail("admin@pizza-blaster.appspot.com", address, subject, body, html=html)
+        mail.send_mail("admin@pizza-blaster.appspotmail.com", address, subject, body, html=html)
         self.response.write("Sent! <p> " + address + "<p>" + html + "<p>" + play_link)
 
 

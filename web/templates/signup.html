@@ -3,7 +3,7 @@
 
 {% block content %}
     <h1>Sign up here</h1>
-    <form method="post" enctype="multipart/form-data" action="{{ upload_url }}">
+    <form method="post" action="{{ upload_url }}">
       <p>
         <label for="name-input">Username</label>
         <input type="text" id="name-input" name="name" required />
@@ -14,7 +14,7 @@
       </p>
       <p>
         <label for="image-input">Add Photo</label>
-        <input type="file" id="image-input" name="image" placeholder="Picture" />
+        <input type="file" id="image-input" placeholder="Picture" />
       </p>
       <p>
         <input type="submit" value="Submit" />
