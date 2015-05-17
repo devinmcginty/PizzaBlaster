@@ -6,7 +6,7 @@
   <ol>
     {% for user in users %}
       <li><div class="leaderboardItem">
-        {% if user.image %}<img src="/image/{{ user.image }}" class="playerPic">{% endif %} <span class="playerScore">{{user.name}}: <strong>{{user.score}}</strong></span>
+        <span class="playerScore">{{user.name}} <strong class="scoreTime">{{user.score}}</strong></span>
       </div></li>
     {% endfor %}
   </ol>

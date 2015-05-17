@@ -20,6 +20,10 @@ a {
     text-decoration: none;
 }
 
+.error {
+  color: red;
+}
+
 .logo {
     display: block;
     margin-left: auto;
@@ -148,4 +152,9 @@ a {
 
 .playerScore {
     margin-left: 5px;
+}
+
+.scoreTime {
+  float: right;
+  margin-right: 5px;
 }
