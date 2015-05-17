@@ -68,6 +68,11 @@ class ChoicePage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('choice.html')
         self.response.write(template.render())
 
+class VerifyRedirect(webapp2.RequestHandler):
+    def get(self, play_id):
+        url = "http://pizza-blaster.appspot.com/go/%s" % play_id
+        self.redirect("pizza://whatever?" + urllib.urlencode({'page': url}))
+
 class VerifyPage(webapp2.RequestHandler):
     def get(self, play_id):
         template = JINJA_ENVIRONMENT.get_template('verify.html')
@@ -186,6 +191,7 @@ class LeadersPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('leaders.html')
         self.response.write(template.render({'users': render_users}))
 
+
 class SendPage(webapp2.RequestHandler):
     def get(self, email):
         print "Email: " + email
@@ -218,7 +224,7 @@ class SendPage(webapp2.RequestHandler):
 
         user.put()
 
-        play_link = "http://pizza-blaster.appspot.com/go/%s" % user.play_id
+        play_link = "http://pizza-blaster.appspot.com/r/%s" % user.play_id
         # play_link = "pizza://whatever?" + urllib.urlencode({'page': play_link_text})
         verification_code = '00023'
         expiration_date = (datetime.now(EASTERN) + ONE_HOUR).strftime("%I:%M %p on %b %d, %Y")
@@ -262,6 +268,7 @@ app = webapp2.WSGIApplication([('/', IndexPage),
                                ('/signup/success', SignupSuccessPage),
                                ('/signup/submit', SignupHandler),
                                ('/image/([^/]+)?', ImageHandler),
+                               ('/r/([^/]+)?', VerifyRedirect),
                                ('/go/([^/]+)?', VerifyPage),
                                ('/play/([^/]+)?', PlayPage),
                                ('/submit/([^/]+)?', PlaySubmitPage),
