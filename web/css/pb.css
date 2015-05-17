@@ -42,6 +42,8 @@ a:link {
 /* play.html */
 
 .gameContainer {
+    position: relative;
+    top: 60px;
     margin: 10px;
     width: 100%;
 }
