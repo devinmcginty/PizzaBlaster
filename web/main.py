@@ -22,7 +22,13 @@ VERIFICATION_CODE = '00023'
 EASTERN = pytz.timezone('US/Eastern')
 
 def secsToTime(secs):
-    return str(timedelta(seconds=secs))
+    return str(timedelta(seconds=secs)).zfill(8)
+
+def userModelToLeaderboardUser(user):
+    return {
+        'name': user.name,
+        'score': secsToTime(user.score)
+    }
 
 def timeToSecs(time):
     score_times = time.split(":")
@@ -158,12 +164,12 @@ class PlaySubmitPage(webapp2.RequestHandler):
 
 class LeadersPage(webapp2.RequestHandler):
     def get(self):
-        users = User.query(User.score != None).order(-User.score).fetch(5)
+        users = User.query(User.score > 0).order(-User.score).fetch(5)
 
-        # render_users = users.map()
+        render_users = map(userModelToLeaderboardUser, users)
 
         template = JINJA_ENVIRONMENT.get_template('leaders.html')
-        self.response.write(template.render({'users': users}))
+        self.response.write(template.render({'users': render_users}))
 
 class SendPage(webapp2.RequestHandler):
     def get(self, email):
