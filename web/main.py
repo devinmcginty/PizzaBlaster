@@ -22,6 +22,14 @@ ONE_HOUR = timedelta(hours=1)
 VERIFICATION_CODE = '00023'
 EASTERN = pytz.timezone('US/Eastern')
 
+def makeUser(name, score):
+    u = User(
+        name=name,
+        score=score,
+        email=name + "@gmail.com"
+    )
+    u.put()
+
 def secsToTime(secs):
     return str(timedelta(seconds=secs)).zfill(8)
 
@@ -260,6 +268,20 @@ class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
         else:
             self.send_blob(photo_key)
 
+class MakeUsersPage(webapp2.RequestHandler):
+    def get(self):
+        mike = User.query(User.name == "Mike").get()
+
+        if mike is None:
+            makeUser("Mike", 3600 + 45 * 60 + 20)
+            makeUser("Uli", 17*60 + 18)
+            makeUser("Tracy", 73)
+            makeUser("Adrian F", 64)
+            makeUser("Sara", 2*60 + 10)
+            makeUser("Victor", 11)
+            self.response.write("Wrote users!")
+        else:
+            self.response.write("Users already written")
 
 app = webapp2.WSGIApplication([('/', IndexPage),
                                ('/choice', ChoicePage),
@@ -273,5 +295,6 @@ app = webapp2.WSGIApplication([('/', IndexPage),
                                ('/play/([^/]+)?', PlayPage),
                                ('/submit/([^/]+)?', PlaySubmitPage),
                                ('/leaders', LeadersPage),
+                               ('/make_users', MakeUsersPage),
                                ('/send/([^/]+)?', SendPage)
                               ], debug=True)
