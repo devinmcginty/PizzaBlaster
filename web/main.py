@@ -21,6 +21,35 @@ ONE_HOUR = timedelta(hours=1)
 VERIFICATION_CODE = '00023'
 EASTERN = pytz.timezone('US/Eastern')
 
+def secsToTime(secs):
+    return str(timedelta(seconds=secs))
+
+def timeToSecs(time):
+    score_times = time.split(":")
+    score_times.reverse()
+
+    seconds = minutes = hours = days = 0
+
+    if len(score_times) > 0:
+        seconds = int(score_times[0])
+    if len(score_times) > 1:
+        minutes = int(score_times[1])
+    if len(score_times) > 2:
+        hours = int(score_times[2])
+    if len(score_times) > 3:
+        days = int(score_times[3])
+
+    score_delta = timedelta(
+        seconds=seconds,
+        minutes=minutes,
+        hours=hours,
+        days=days
+    )
+
+    score_seconds = score_delta.total_seconds()
+
+    return score_seconds
+
 
 class IndexPage(webapp2.RequestHandler):
     def get(self):
@@ -116,14 +145,10 @@ class PlaySubmitPage(webapp2.RequestHandler):
             self.response.write("invalid user")
             return
 
-        score = self.request.get('score')
+        time = self.request.get('score')
+        score_seconds = timeToSecs(time)
 
-        try:
-            score = int(score)
-        except:
-            score = 0
-
-        user.score = score
+        user.score = score_seconds
         user.play_end = datetime.utcnow()
         user.put()
 
@@ -134,6 +159,8 @@ class PlaySubmitPage(webapp2.RequestHandler):
 class LeadersPage(webapp2.RequestHandler):
     def get(self):
         users = User.query(User.score != None).order(-User.score).fetch(5)
+
+        # render_users = users.map()
 
         template = JINJA_ENVIRONMENT.get_template('leaders.html')
         self.response.write(template.render({'users': users}))
