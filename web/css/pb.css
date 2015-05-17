@@ -128,7 +128,7 @@ a {
 }
 
 .leaderboardItem {
-    margin: 10px;
+    margin: 10px 2px 5px 2px;
     width: auto;
     padding: 2px;
     border: 1px solid black;
@@ -143,5 +143,5 @@ a {
 }
 
 .playerScore {
-    margin-left: 20px;
+    margin-left: 5px;
 }
