@@ -28,6 +28,11 @@ class SignupPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('signup.html')
         self.response.write(template.render({'upload_url': upload_url}))
 
+class SorryPage(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('sorry.html')
+        self.response.write(template.render())
+
 class SignupHandler(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         image_key = None
@@ -147,7 +152,7 @@ Click this link: %s
 """ % (user.name, play_link)
 
         mail.send_mail("adrienip@gmail.com", address, subject, body)
-        self.response.write("Sent! <p> " + address + "<p>" + body)
+        self.response.write("Sent! <p> " + address + "<p>" + body + "<p>" + play_link)
 
 
 class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
@@ -159,6 +164,7 @@ class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
 
 
 app = webapp2.WSGIApplication([('/', IndexPage),
+                               ('/sorry', SorryPage),
                                ('/signup', SignupPage),
                                ('/signup/submit', SignupHandler),
                                ('/image/([^/]+)?', ImageHandler),
