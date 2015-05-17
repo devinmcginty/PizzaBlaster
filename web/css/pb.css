@@ -1,6 +1,10 @@
+/** {
+    tml: hidden;
+}*/
 html, body {
     font-size: 120%;
     padding: 10px;
+    overflow-x: hidden;
 }
 h1, h2 {
     text-align: center;
@@ -54,7 +58,7 @@ a {
 /* signup.html */
 
 .textField {
-    width: 90%;
+    width: 93%;
 }
 
 .signupHeader {
