@@ -70,7 +70,9 @@ class PlayPage(webapp2.RequestHandler):
         user = User.query(User.play_id == play_id).get()
 
         if user is None:
-            self.response.write("invalid user")
+            template = JINJA_ENVIRONMENT.get_template('play.html')
+            self.response.write(template.render({'name': 'not a person', 'play_id': play_id}))
+            # self.response.write("invalid user")
             return
 
         now = datetime.utcnow()
@@ -149,6 +151,7 @@ class SendPage(webapp2.RequestHandler):
         user.put()
 
         play_link = "http://localhost:8080/play/%s" % user.play_id
+        verification_code = '00023'
 
         address = "%s <%s>" % (user.name, user.email)
 
@@ -159,7 +162,9 @@ Congratulations, %s!
 It's your turn to play Pizza Blaster.
 
 Click this link: %s
-""" % (user.name, play_link)
+
+Verification Code: %s
+""" % (user.name, play_link, verification_code)
 
         mail.send_mail("adrienip@gmail.com", address, subject, body)
         self.response.write("Sent! <p> " + address + "<p>" + body + "<p>" + play_link)
