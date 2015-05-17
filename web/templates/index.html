@@ -9,20 +9,13 @@
 
 {% block content %}
     <h1>Pizza Blaster</h1>
-    <h2>Sign up here</h2>
+    <h2>Welcome to Pizza Blaster. Have you played before?</h2>
     <form method="post" enctype="multipart/form-data" action="{{ upload_url }}">
       <p>
-        <input type="text" name="name" placeholder="Name" required />
+        <a href="/sorry">Yes</a>
       </p>
       <p>
-        <input type="email" name="email" placeholder="Email" required />
-      </p>
-      <p>
-        <label for="image-input">Upload a picture</label>
-        <input type="file" id="image-input" name="image" placeholder="Picture" />
-      </p>
-      <p>
-        <input type="submit" value="Sign Up" />
+        <a href="/signup">No</a>
       </p>
     </form>
 {% endblock %}

@@ -19,8 +19,13 @@ ONE_DAY = timedelta(days=1)
 
 class IndexPage(webapp2.RequestHandler):
     def get(self):
-        upload_url = blobstore.create_upload_url('/signup')
         template = JINJA_ENVIRONMENT.get_template('index.html')
+        self.response.write(template.render())
+
+class SignupPage(webapp2.RequestHandler):
+    def get(self):
+        upload_url = blobstore.create_upload_url('/signup/submit')
+        template = JINJA_ENVIRONMENT.get_template('signup.html')
         self.response.write(template.render({'upload_url': upload_url}))
 
 class SignupHandler(blobstore_handlers.BlobstoreUploadHandler):
@@ -154,7 +159,8 @@ class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
 
 
 app = webapp2.WSGIApplication([('/', IndexPage),
-                               ('/signup', SignupHandler),
+                               ('/signup', SignupPage),
+                               ('/signup/submit', SignupHandler),
                                ('/image/([^/]+)?', ImageHandler),
                                ('/play/([^/]+)?', PlayPage),
                                ('/submit/([^/]+)?', PlaySubmitPage),
