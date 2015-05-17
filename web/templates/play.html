@@ -2,7 +2,7 @@
 {% block title %}Play{% endblock %}
 
 {% block content %}
-    <!-- <h2>Hi {{ name }}! Play now!</h2> -->
+    <!-- <h1>Hi {{ name }}! Play now!</h1> -->
     <style type="text/css">
     .logo {
       display: none;
@@ -10,11 +10,13 @@
     </style>
     <div class="gameContainer">
 
-      <h2 class="afterGame invisible">Enter your time.</h2>
-
       <img src="/images/the_picture_of_the_pizza.jpg" class="pizza"/>
 
-      <div class="timer"><h1 id="timetext"></div>
+      <div class="timer">
+        <span class="afterGame invisible"><h1>Your time was </h1><br /></span>
+        <h1 id="timetext"></h1>
+        <span class="afterGame invisible"><br /><h1>Please enter your time to continue.</h1></span>
+      </div>
 
       <div class="button doneButton">I'm done.</div>
 
@@ -39,7 +41,7 @@
 
     $(".doneButton").click(function() {
       clearTimeout(t);
-      $(".pizza").addClass("invisible");
+      $(".pizza").remove();
       $(".doneButton").addClass("invisible");
       $(".afterGame").removeClass("invisible");
     });
