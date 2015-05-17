@@ -16,6 +16,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 ONE_DAY = timedelta(days=1)
+VERIFICATION_CODE = '00023'
 
 class IndexPage(webapp2.RequestHandler):
     def get(self):
@@ -26,6 +27,21 @@ class ChoicePage(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('choice.html')
         self.response.write(template.render())
+
+class VerifyPage(webapp2.RequestHandler):
+    def get(self, play_id):
+        template = JINJA_ENVIRONMENT.get_template('verify.html')
+        self.response.write(template.render())
+
+    def post(self, play_id):
+        verification_code = self.request.get('verification_code')
+
+        if verification_code != VERIFICATION_CODE:
+            template = JINJA_ENVIRONMENT.get_template('verify.html')
+            self.response.write(template.render({'error': True}))
+            return
+
+        self.redirect('/play/' + play_id)
 
 class SignupPage(webapp2.RequestHandler):
     def get(self):
@@ -150,7 +166,7 @@ class SendPage(webapp2.RequestHandler):
 
         user.put()
 
-        play_link = "http://localhost:8080/play/%s" % user.play_id
+        play_link = "http://localhost:8080/go/%s" % user.play_id
         verification_code = '00023'
 
         address = "%s <%s>" % (user.name, user.email)
@@ -185,6 +201,7 @@ app = webapp2.WSGIApplication([('/', IndexPage),
                                ('/signup/success', SignupSuccessPage),
                                ('/signup/submit', SignupHandler),
                                ('/image/([^/]+)?', ImageHandler),
+                               ('/go/([^/]+)?', VerifyPage),
                                ('/play/([^/]+)?', PlayPage),
                                ('/submit/([^/]+)?', PlaySubmitPage),
                                ('/leaders', LeadersPage),

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Almost Ready{% endblock %}
+
+{% block content %}
+    <form method="post">
+      {% if error %}
+        <p class="error">Incorrect Verification Code</p>
+      {% endif %}
+      <p>
+        <input type="text" name="verification_code" placeholder="Verification Code" />
+      </p>
+      <p>
+        <input type="submit" value="I'm Ready!" />
+      </p>
+    </form>
+{% endblock %}
