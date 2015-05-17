@@ -21,7 +21,7 @@
       <div class="button doneButton">I'm done.</div>
 
       <div class="submitScore afterGame invisible">
-        <form method="post" action="/submit/{{ play_id }}">
+        <form method="post" action="/submit/{{ play_id }}" class="scoreInput">
           <p>
             <input type="text" name="score" placeholder="Your time" pattern="[0-9:]*" />
           </p>
