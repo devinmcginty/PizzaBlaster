@@ -14,3 +14,10 @@ class User(ndb.Model):
     score = ndb.IntegerProperty()
     play_start = ndb.DateTimeProperty()
     play_end = ndb.DateTimeProperty()
+
+
+class Email(ndb.Model):
+    create_date = ndb.DateTimeProperty(auto_now_add=True)
+    update_date = ndb.DateTimeProperty(auto_now=True)
+
+    email = ndb.StringProperty(required=True)

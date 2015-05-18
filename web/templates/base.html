@@ -28,8 +28,16 @@
 </head>
 <body>
     <header>
-      <img src="/images/logo.png" class="logo">
+      <img src="/images/logo.png" class="logo" alt="Pizza Blaster">
     </header>
     <div id="content">{% block content %}{% endblock %}</div>
+    <footer>
+      <div class="made-at-container">
+        <p>Made at:</p>
+        <p class="comedy-hack-day-container">
+          <a href="http://www.comedyhackday.org/"><img class="comedy-hack-day" src="/images/comedy_hack_day.png" alt="Comedy Hack Day"></a>
+        </p>
+      </div>
+    </footer>
 </body>
 </html>

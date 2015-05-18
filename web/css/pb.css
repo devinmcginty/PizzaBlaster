@@ -5,9 +5,8 @@ html, body {
     height: 100%;
     width: 100%;
     font-size: 120%;
-    padding: 10px;
 }
-h1, h2 {
+h1, h2, h3 {
     text-align: center;
 }
 h1 {
@@ -16,8 +15,16 @@ h1 {
 h2 {
     font-size: 24px;
 }
+h3 {
+  font-size: 16px;
+  font-style: italic;
+}
 a {
     text-decoration: none;
+}
+
+#content {
+  margin: 20px;
 }
 
 .error {
@@ -158,4 +165,27 @@ a {
 .scoreTime {
   float: right;
   margin-right: 5px;
+}
+
+.emailButton {
+  margin-top: 10px;
+}
+
+img.comedy-hack-day {
+  width: 100%;
+}
+
+footer {
+  background-color: black;
+  color: white;
+  padding: 20px;
+  font-weight: lighter;
+  text-align: center;
+}
+
+.made-at-container {
+  width: 80%;
+  max-width: 400px;
+  display: inline-block;
+  text-align: left;
 }
