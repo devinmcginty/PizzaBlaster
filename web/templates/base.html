@@ -31,27 +31,22 @@
     {% endblock %}
 </head>
 <body>
-    <header>
-      <img src="/images/logo.png" class="logo" alt="Pizza Blaster">
-    </header>
-    <div id="content">{% block content %}{% endblock %}</div>
-    <footer>
-      <div class="made-at-container">
-        <p>Made at:</p>
-        <p class="comedy-hack-day-container">
-          <a href="http://www.comedyhackday.org/"><img class="comedy-hack-day" src="/images/comedy_hack_day.png" alt="Comedy Hack Day"></a>
-        </p>
-      </div>
-    </footer>
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  <a href="http://bit.ly/chdRibbon" class="made_at_chd_ribbon white right" target="_blank" style="position:absolute;top:0;right:0;">
+    <img src="http://curiouspeterson.github.io/made-at-chd-ribbon/made-at-chd-black-right.svg" style="height:149px;width:149px;z-index:9999;">
+  </a>
+  <header>
+    <img src="/images/logo.png" class="logo" alt="Pizza Blaster">
+  </header>
+  <div id="content">{% block content %}{% endblock %}</div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-      ga('create', 'UA-63134107-1', 'auto');
-      ga('send', 'pageview');
+    ga('create', 'UA-63134107-1', 'auto');
+    ga('send', 'pageview');
 
-    </script>
+  </script>
 </body>
 </html>
