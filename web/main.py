@@ -187,8 +187,16 @@ class SignupPage(webapp2.RequestHandler):
 
         if existing_user and email != ALEC_EMAIL:
             template = JINJA_ENVIRONMENT.get_template('signup.html')
-            self.response.write(template.render({'error': u"User with email {0} already exists".format(email)}))
-            return
+
+            # User already started the game
+            if existing_user.play_start:
+                self.response.write(template.render({'error': u"You have already played Pizza Blaster."}))
+                return
+
+            # User has not been emailed yet
+            if not existing_user.play_id:
+                self.response.write(template.render({'error': u"You have already signed up. Your email is on its way."}))
+                return
 
         name = self.request.get('name')
 
@@ -285,8 +293,8 @@ class PlayPage(webapp2.RequestHandler):
         expiration_date = user.email_date + ONE_HOUR
 
         if now > expiration_date:
-            template = JINJA_ENVIRONMENT.get_template('error.html')
-            self.response.write(template.render({'error': u"Sorry {0}. Your game expired at {1}.".format(user.email, formatTime(expiration_date))}))
+            template = JINJA_ENVIRONMENT.get_template('expired.html')
+            self.response.write(template.render({'error': u"Sorry {0}. Your game expired.".format(user.email)}))
             return
 
         user.play_start = now
