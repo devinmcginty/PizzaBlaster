@@ -8,16 +8,9 @@
     }
     </style>
     <h2>Welcome to Pizza Blaster. Have you played before?</h2>
-    <form method="post" enctype="multipart/form-data" action="{{ upload_url }}">
-      <p>
-        <a href="/sorry">
-          <div class="button binaryButton">Yes</div>
-        </a>
-      </p>
-      <p>
-        <a href="/signup">
-          <div class="button binaryButton">No</div>
-        </a>
-      </p>
-    </form>
+
+    <div class="center">
+      <a href="/sorry" class="button">Yes</a>
+      <a href="/signup" class="button">No</a>
+    </div>
 {% endblock %}

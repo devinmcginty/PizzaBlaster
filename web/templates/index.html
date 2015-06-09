@@ -1,28 +1,74 @@
-{% extends "base.html" %}
-{% block title %}Pizza Blaster{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/pb.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/images/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
 
-{% block content %}
-  <h1>PIZZA BLASTER</h1>
-  <h2>A Game For Young People</h2>
+    <meta property="og:site_name" content="Pizza Blaster"/>
+    <meta property="og:description" content="A Game For Young People" />
+    <meta property="og:image" content="http://pizzablaster.website/images/main_screen.png" />
+    <title>Pizza Blaster</title>
+</head>
+<body>
+  <a href="http://bit.ly/chdRibbon" class="made_at_chd_ribbon white right" target="_blank" style="position:absolute;top:0;right:0;">
+    <img src="http://curiouspeterson.github.io/made-at-chd-ribbon/made-at-chd-black-right.svg" style="height:149px;width:149px;z-index:9999;">
+  </a>
+  <header>
+    <img src="/images/logo.png" class="logo" alt="Pizza Blaster">
+  </header>
+  <div id="content">
+    <h1>PIZZA BLASTER</h1>
+    <h2>A Game For Young People</h2>
 
-  <!-- Begin MailChimp Signup Form -->
-  <div id="mc_embed_signup">
-    <form action="//website.us10.list-manage.com/subscribe/post?u=1f6c52a11230ecb814f20c08d&amp;id=784e35712a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-      <div id="mc_embed_signup_scroll">
-      	<h3>Sign up to be notified when Pizza Blaster is ready for you.</h3>
-        <div class="mc-field-group">
-        	<label for="mce-EMAIL">Email Address </label>
-          <input autofocus type="email" value="" name="EMAIL" class="required email subscribeField" id="mce-EMAIL">
-        </div>
-      	<div id="mce-responses" class="clear">
-      		<div class="response" id="mce-error-response" style="display:none"></div>
-      		<div class="response" id="mce-success-response" style="display:none"></div>
-      	</div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-          <div style="position: absolute; left: -5000px;"><input type="text" name="b_1f6c52a11230ecb814f20c08d_784e35712a" tabindex="-1" value=""></div>
-          <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button submitButton emailButton"></div>
-        </div>
-    </form>
+    <!-- Begin MailChimp Signup Form -->
+    <div id="mc_embed_signup">
+      <form action="//website.us10.list-manage.com/subscribe/post?u=1f6c52a11230ecb814f20c08d&amp;id=784e35712a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+        	<h3>Sign up to be notified when Pizza Blaster is ready for you.</h3>
+          <div class="mc-field-group">
+          	<label for="mce-EMAIL">Email Address </label>
+            <input autofocus type="email" value="" name="EMAIL" class="required email subscribeField" id="mce-EMAIL">
+          </div>
+        	<div id="mce-responses" class="clear">
+        		<div class="response" id="mce-error-response" style="display:none"></div>
+        		<div class="response" id="mce-success-response" style="display:none"></div>
+        	</div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+            <div style="position: absolute; left: -5000px;"><input type="text" name="b_1f6c52a11230ecb814f20c08d_784e35712a" tabindex="-1" value=""></div>
+            <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button submitButton emailButton"></div>
+          </div>
+      </form>
+    </div>
+
+    <!--End mc_embed_signup-->
   </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  <!--End mc_embed_signup-->
-{% endblock %}
+    ga('create', 'UA-63134107-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+</body>
+</html>

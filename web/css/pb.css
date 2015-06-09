@@ -27,6 +27,10 @@ a {
   text-align: center;
 }*/
 
+.center {
+  text-align: center;
+}
+
 #content {
   padding: 20px;
   max-width: 540px;
@@ -51,6 +55,7 @@ a {
 }
 
 .button {
+    display: inline-block;
     color: white;
     text-align: center;
     font-size: 23px;
@@ -60,6 +65,12 @@ a {
     margin-right: auto;
     padding: 5px;
     border-radius: 5px;
+    min-width: 100px;
+}
+
+.button:hover {
+  color: white;
+  text-decoration: none;
 }
 
 /* index.html */
@@ -85,7 +96,7 @@ a {
     margin: 5px;
 }
 
-.signupContainer {
+.signupContainer, form {
     padding: 15px;
     /*font-size: 20px;*/
 }

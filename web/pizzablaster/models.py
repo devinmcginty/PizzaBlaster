@@ -4,11 +4,14 @@ class User(ndb.Model):
     create_date = ndb.DateTimeProperty(auto_now_add=True)
     update_date = ndb.DateTimeProperty(auto_now=True)
 
-    name = ndb.StringProperty()
+    name = ndb.StringProperty(required=True)
     email = ndb.StringProperty(required=True)
     image = ndb.BlobKeyProperty()
 
+    send_task_date = ndb.DateTimeProperty(required=True)
+
     play_id = ndb.StringProperty()
+    verification_code = ndb.StringProperty()
     email_date = ndb.DateTimeProperty()
 
     score = ndb.IntegerProperty()

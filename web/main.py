@@ -9,6 +9,9 @@ from google.appengine.api import mail
 from time import sleep
 import pytz
 import urllib
+from google.appengine.ext import deferred
+import random
+import logging
 
 from pizzablaster.models import User
 
@@ -19,8 +22,8 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 ONE_DAY = timedelta(days=1)
 ONE_HOUR = timedelta(hours=1)
-VERIFICATION_CODE = '00023'
 EASTERN = pytz.timezone('US/Eastern')
+EMAIL_DELAY = timedelta(days=14)
 
 def makeUser(name, score):
     u = User(
@@ -65,11 +68,55 @@ def timeToSecs(time):
 
     return int(score_seconds)
 
+def formatTime(dt):
+    return dt.strftime("%I:%M %p %Z on %b %d, %Y")
+
+def sendEmail(user_id):
+    user = ndb.Key(User, user_id).get()
+
+    user.play_id = str(uuid.uuid4())
+    user.email_date = datetime.utcnow()
+
+    user.put()
+
+    play_link = "http://pizzablaster.website/go/%s" % user.play_id
+    # play_link = "pizza://whatever?" + urllib.urlencode({'page': play_link_text})
+    expiration_date = formatTime(datetime.now(EASTERN) + ONE_HOUR)
+
+    address = "%s <%s>" % (user.name, user.email)
+
+    subject = "It's time to play Pizza Blaster"
+
+    template = JINJA_ENVIRONMENT.get_template('email.html')
+    html = template.render({
+        'name': user.name,
+        'play_link': play_link,
+        'verification_code': user.verification_code,
+        'expiration_date': expiration_date
+    })
+
+    template = JINJA_ENVIRONMENT.get_template('email_plain.txt')
+    body = template.render({
+        'name': user.name,
+        'play_link': play_link,
+        'verification_code': user.verification_code,
+        'expiration_date': expiration_date
+    })
+
+    mail.send_mail("admin@pizza-blaster.appspotmail.com", address, subject, body, html=html)
+
+    logging.info(u"Sent email to {0}".format(address))
+
 
 class IndexPage(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render())
+
+# class StartPage(webapp2.RequestHandler):
+#     def get(self):
+#         template = JINJA_ENVIRONMENT.get_template('start.html')
+#         self.response.write(template.render())
 
 class ChoicePage(webapp2.RequestHandler):
     def get(self):
@@ -83,15 +130,27 @@ class VerifyRedirect(webapp2.RequestHandler):
 
 class VerifyPage(webapp2.RequestHandler):
     def get(self, play_id):
+        user = User.query(User.play_id == play_id).get()
+
+        if not user:
+            self.response.write("Invalid play id")
+            return
+
         template = JINJA_ENVIRONMENT.get_template('verify.html')
         self.response.write(template.render())
 
     def post(self, play_id):
+        user = User.query(User.play_id == play_id).get()
+
+        if not user:
+            self.response.write("Invalid play id")
+            return
+
         verification_code = self.request.get('verification_code')
 
-        if verification_code != VERIFICATION_CODE:
+        if verification_code != user.verification_code:
             template = JINJA_ENVIRONMENT.get_template('verify.html')
-            self.response.write(template.render({'error': True}))
+            self.response.write(template.render({'error': 'Incorrect Verification Code'}))
             return
 
         self.redirect('/play/' + play_id)
@@ -102,68 +161,106 @@ class SignupPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('signup.html')
         self.response.write(template.render({'upload_url': '/signup/submit'}))
 
-class SignupSuccessPage(webapp2.RequestHandler):
-    def get(self):
+    def post(self):
+        email = self.request.get('email')
+
+        existing_user = User.query(User.email == email).get()
+
+        if existing_user:
+            template = JINJA_ENVIRONMENT.get_template('signup.html')
+            self.response.write(template.render({'error': u"User with email {0} already exists".format(email)}))
+            return
+
+        name = self.request.get('name')
+
+        now = datetime.utcnow()
+        delay = timedelta(seconds=random.randint(0, EMAIL_DELAY.total_seconds()))
+        send_task_date = now + delay
+
+        verification_code = str(User.query().count()).zfill(5)
+
+        user = User(
+            email=email,
+            name=name,
+            send_task_date=send_task_date,
+            verification_code=verification_code
+        )
+
+        user.put()
+
+        deferred.defer(sendEmail, user.key.id(), _eta=send_task_date)
+
         template = JINJA_ENVIRONMENT.get_template('signup_success.html')
         self.response.write(template.render())
+
+# class SignupSuccessPage(webapp2.RequestHandler):
+#     def get(self):
+#         template = JINJA_ENVIRONMENT.get_template('signup_success.html')
+#         self.response.write(template.render())
 
 class SorryPage(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('sorry.html')
         self.response.write(template.render())
 
-class SignupHandler(webapp2.RequestHandler):
-    def post(self):
-        email = self.request.get('email')
-        name = self.request.get('name')
+# class SignupHandler(webapp2.RequestHandler):
+#     def post(self):
+#         email = self.request.get('email')
+#         name = self.request.get('name')
+#
+#         now = datetime.utcnow()
+#         delay = timedelta(seconds=random.randint(0, EMAIL_DELAY.total_seconds()))
+#         send_task_date = now + delay
+#
+#         user = User(
+#             email=email,
+#             name=name,
+#             send_task_date=send_task_date
+#         )
+#
+#         user.put()
+#
+#         deferred.defer(sendEmail, user.key.id(), _eta=send_task_date)
+#
+#         self.redirect('/signup/success')
 
-        user = User(
-            email=email,
-            name=name
-        )
-
-        user.put()
-
-        self.redirect('/signup/success')
-
-class SignupHandlerBlob(blobstore_handlers.BlobstoreUploadHandler):
-    def post(self):
-        image_key = None
-        try:
-            upload = self.get_uploads()[0]
-            image_key = upload.key()
-        except:
-            pass
-
-        email = self.request.get('email')
-        name = self.request.get('name')
-
-        user = User(
-            email=email,
-            name=name,
-            image=image_key
-        )
-
-        user.put()
-
-        self.redirect('/signup/success')
+# class SignupHandlerBlob(blobstore_handlers.BlobstoreUploadHandler):
+#     def post(self):
+#         image_key = None
+#         try:
+#             upload = self.get_uploads()[0]
+#             image_key = upload.key()
+#         except:
+#             pass
+#
+#         email = self.request.get('email')
+#         name = self.request.get('name')
+#
+#         user = User(
+#             email=email,
+#             name=name,
+#             image=image_key
+#         )
+#
+#         user.put()
+#
+#         self.redirect('/signup/success')
 
 class PlayPage(webapp2.RequestHandler):
     def get(self, play_id):
         user = User.query(User.play_id == play_id).get()
 
         if user is None:
-            template = JINJA_ENVIRONMENT.get_template('play.html')
-            self.response.write(template.render({'name': 'Alec', 'play_id': play_id}))
-            # self.response.write("invalid user")
+            self.response.write("Invalid play id")
             return
 
         now = datetime.utcnow()
-        delta = user.email_date - now
+        expiration_date = user.email_date + ONE_HOUR
 
-        # if delta > ONE_DAY:
-        #     self.response.write("too late!")
-        #     return
+        if now > expiration_date:
+            template = JINJA_ENVIRONMENT.get_template('error.html')
+            self.response.write(template.render({'error': u"Sorry {0}. Your game expired at {1}.".format(user.email, formatTime(expiration_date))}))
+            return
 
         user.play_start = now
         user.put()
@@ -284,11 +381,12 @@ class MakeUsersPage(webapp2.RequestHandler):
             self.response.write("Users already written")
 
 app = webapp2.WSGIApplication([('/', IndexPage),
+                            #    ('/start', StartPage),
                                ('/choice', ChoicePage),
                                ('/sorry', SorryPage),
                                ('/signup', SignupPage),
-                               ('/signup/success', SignupSuccessPage),
-                               ('/signup/submit', SignupHandler),
+                            #    ('/signup/success', SignupSuccessPage),
+                            #    ('/signup/submit', SignupHandler),
                                ('/image/([^/]+)?', ImageHandler),
                                ('/r/([^/]+)?', VerifyRedirect),
                                ('/go/([^/]+)?', VerifyPage),

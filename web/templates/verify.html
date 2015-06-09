@@ -4,10 +4,10 @@
 {% block content %}
     <form method="post">
       {% if error %}
-        <p class="error">Incorrect Verification Code</p>
+        <p class="error">{{ error }}</p>
       {% endif %}
       <p>
-        <input type="tel" name="verification_code" placeholder="Verification Code" />
+        <input class="textField" type="tel" name="verification_code" placeholder="Verification Code" required />
       </p>
       <p>
         <input type="submit" class="button" value="I'm Ready!" />
