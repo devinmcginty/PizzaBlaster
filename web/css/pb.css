@@ -212,6 +212,15 @@ footer {
   width: 100%;
 }
 
+table {
+  font-size: 18px;
+  display: inline-block;
+}
+
+table.liars {
+  font-size: 12px;
+}
+
 table td, table th {
   padding: 8px;
 }

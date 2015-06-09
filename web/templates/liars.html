@@ -3,24 +3,26 @@
 
 {% block content %}
   <h2>Liars</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Rank</th>
-        <th>Name</th>
-        <th>Time</th>
-        <th>Real Time</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for user in users %}
-        <tr class="leaderboardItem">
-          <td>{{loop.index}}</td>
-          <td>{{user.name}}</td>
-          <td>{{user.score}}</td>
-          <td>{{user.real_score}}</td>
+  <div class="center">
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Time</th>
+          <th>Real Time</th>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for user in users %}
+          <tr class="leaderboardItem">
+            <td>{{loop.index}}</td>
+            <td><strong>{{user.name}}</strong></td>
+            <td>{{user.score}}</td>
+            <td>{{user.real_score}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}

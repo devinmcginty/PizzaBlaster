@@ -8,7 +8,7 @@ class User(ndb.Model):
     email = ndb.StringProperty(required=True)
     image = ndb.BlobKeyProperty()
 
-    send_task_date = ndb.DateTimeProperty(required=True)
+    send_task_date = ndb.DateTimeProperty()
 
     play_id = ndb.StringProperty()
     verification_code = ndb.StringProperty()

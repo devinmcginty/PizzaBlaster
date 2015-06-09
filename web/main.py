@@ -24,13 +24,15 @@ ONE_DAY = timedelta(days=1)
 ONE_HOUR = timedelta(hours=1)
 EASTERN = pytz.timezone('US/Eastern')
 EMAIL_DELAY = timedelta(days=14)
-ALEC_EMAIL = "alec_cohen@gmail.com"
+ALEC_EMAIL = "alec.james.c@gmail.com"
 
 def makeUser(name, score):
     u = User(
         name=name,
         score=score,
-        email=name + "@gmail.com"
+        real_score=score,
+        email=name + "@gmail.com",
+        liar=False
     )
     u.put()
 
@@ -38,11 +40,16 @@ def secsToTime(secs):
     return str(timedelta(seconds=secs)).zfill(8)
 
 def userModelToLeaderboardUser(user):
-    time_diff = int((user.play_end - user.play_start).total_seconds())
+    real_score = user.real_score
+
+    if user.play_start and user.play_end:
+        time_diff = int((user.play_end - user.play_start).total_seconds())
+        real_score = min(real_score, time_diff)
+
     return {
         'name': user.name,
         'score': secsToTime(user.score),
-        'real_score': secsToTime(min(time_diff, user.real_score)),
+        'real_score': secsToTime(real_score),
     }
 
 def timeToSecs(time):
@@ -82,7 +89,10 @@ def sendEmail(user_id):
 
     user.put()
 
-    play_link = "http://pizzablaster.website/go/%s" % user.play_id
+    if user.email == ALEC_EMAIL:
+        play_link = "http://pizzablaster.website/r/%s" % user.play_id
+    else:
+        play_link = "http://pizzablaster.website/go/%s" % user.play_id
     # play_link = "pizza://whatever?" + urllib.urlencode({'page': play_link_text})
     expiration_date = formatTime(datetime.now(EASTERN) + ONE_HOUR)
 
@@ -191,7 +201,8 @@ class SignupPage(webapp2.RequestHandler):
 
         user.put()
 
-        deferred.defer(sendEmail, user.key.id(), _eta=send_task_date)
+        if user.email != ALEC_EMAIL:
+            deferred.defer(sendEmail, user.key.id(), _eta=send_task_date)
 
         template = JINJA_ENVIRONMENT.get_template('signup_success.html')
         self.response.write(template.render())
@@ -374,38 +385,7 @@ class SendPage(webapp2.RequestHandler):
             self.response.write("no user")
             return
 
-        user.play_id = str(uuid.uuid4())
-        user.email_date = datetime.utcnow()
-
-        user.put()
-
-        play_link = "http://pizza-blaster.appspot.com/r/%s" % user.play_id
-        # play_link = "pizza://whatever?" + urllib.urlencode({'page': play_link_text})
-        verification_code = '00023'
-        expiration_date = (datetime.now(EASTERN) + ONE_HOUR).strftime("%I:%M %p on %b %d, %Y")
-
-        address = "%s <%s>" % (user.name, user.email)
-
-        subject = "It's time to play Pizza Blaster"
-
-        template = JINJA_ENVIRONMENT.get_template('email.html')
-        html = template.render({
-            'name': user.name,
-            'play_link': play_link,
-            'verification_code': verification_code,
-            'expiration_date': expiration_date
-        })
-
-        template = JINJA_ENVIRONMENT.get_template('email_plain.txt')
-        body = template.render({
-            'name': user.name,
-            'play_link': play_link,
-            'verification_code': verification_code,
-            'expiration_date': expiration_date
-        })
-
-        mail.send_mail("admin@pizza-blaster.appspotmail.com", address, subject, body, html=html)
-        self.response.write("Sent! <p> " + address + "<p>" + html + "<p>" + play_link)
+        sendEmail(user.key.id())
 
 
 class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):

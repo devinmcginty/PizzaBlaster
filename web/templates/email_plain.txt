@@ -9,3 +9,5 @@ Click the link below and enter your code to begin.
 Verification Code: {{ verification_code }}
 
 Reminder: this code will expire at {{ expiration_date }}. You get only one chance.
+
+Warning: If you leave the game for any reason your one chance will terminate automatically after 15 seconds.
