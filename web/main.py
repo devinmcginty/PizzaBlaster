@@ -84,6 +84,10 @@ def formatTime(dt):
 def sendEmail(user_id):
     user = ndb.Key(User, user_id).get()
 
+    if user.play_id:
+        logging.info(u"User was already emailed! {0}".format(user.email))
+        return
+
     user.play_id = str(uuid.uuid4())
     user.email_date = datetime.utcnow()
 
@@ -205,6 +209,8 @@ class SignupPage(webapp2.RequestHandler):
 
         if user.email != ALEC_EMAIL:
             deferred.defer(sendEmail, user.key.id(), _eta=send_task_date)
+        else:
+            deferred.defer(sendEmail, user.key.id(), _countdown=45)
 
         template = JINJA_ENVIRONMENT.get_template('signup_success.html')
         self.response.write(template.render())
