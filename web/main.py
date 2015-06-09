@@ -120,6 +120,8 @@ def sendEmail(user_id):
 
     logging.info(u"Sent email to {0}".format(address))
 
+    return html
+
 
 class IndexPage(webapp2.RequestHandler):
     def get(self):
@@ -268,10 +270,10 @@ class PlayPage(webapp2.RequestHandler):
             self.response.write("Invalid play id")
             return
 
-        if user.play_start:
-            template = JINJA_ENVIRONMENT.get_template('error.html')
-            self.response.write(template.render({'error': u"Sorry {0}. You can only play Pizza Blaster once.".format(user.email)}))
-            return
+        # if user.play_start:
+        #     template = JINJA_ENVIRONMENT.get_template('error.html')
+        #     self.response.write(template.render({'error': u"Sorry {0}. You can only play Pizza Blaster once.".format(user.email)}))
+        #     return
 
         now = datetime.utcnow()
         expiration_date = user.email_date + ONE_HOUR
@@ -385,7 +387,9 @@ class SendPage(webapp2.RequestHandler):
             self.response.write("no user")
             return
 
-        sendEmail(user.key.id())
+        html = sendEmail(user.key.id())
+
+        self.response.write(u"Sent email to {0}<p>{1}".format(user.email, html))
 
 
 class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
