@@ -57,7 +57,7 @@ $(function() {
   function triedToHide() {
     if (!endDate) {
       // Still playing
-      alert("You are still playing Pizza Blaster.");
+      alert("No. You are still playing Pizza Blaster.");
     }
   }
 
@@ -88,8 +88,8 @@ $(function() {
       }
     }
 
-    $("input[name=realscore]").val(Math.floor(duration.asSeconds()));
-    $("input[name=inputscore]").val(Math.floor(input.asSeconds()));
+    $("input[name=real_score]").val(Math.floor(duration.asSeconds()));
+    $("input[name=input_score]").val(Math.floor(input.asSeconds()));
   });
 
 });

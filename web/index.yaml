@@ -14,3 +14,9 @@ indexes:
   properties:
   - name: email
   - name: play_id
+
+- kind: User
+  properties:
+  - name: liar
+  - name: score
+    direction: desc

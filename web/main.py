@@ -24,6 +24,7 @@ ONE_DAY = timedelta(days=1)
 ONE_HOUR = timedelta(hours=1)
 EASTERN = pytz.timezone('US/Eastern')
 EMAIL_DELAY = timedelta(days=14)
+ALEC_EMAIL = "alec_cohen@gmail.com"
 
 def makeUser(name, score):
     u = User(
@@ -37,9 +38,11 @@ def secsToTime(secs):
     return str(timedelta(seconds=secs)).zfill(8)
 
 def userModelToLeaderboardUser(user):
+    time_diff = int((user.play_end - user.play_start).total_seconds())
     return {
         'name': user.name,
-        'score': secsToTime(user.score)
+        'score': secsToTime(user.score),
+        'real_score': secsToTime(min(time_diff, user.real_score)),
     }
 
 def timeToSecs(time):
@@ -166,7 +169,7 @@ class SignupPage(webapp2.RequestHandler):
 
         existing_user = User.query(User.email == email).get()
 
-        if existing_user:
+        if existing_user and email != ALEC_EMAIL:
             template = JINJA_ENVIRONMENT.get_template('signup.html')
             self.response.write(template.render({'error': u"User with email {0} already exists".format(email)}))
             return
@@ -254,6 +257,11 @@ class PlayPage(webapp2.RequestHandler):
             self.response.write("Invalid play id")
             return
 
+        if user.play_start:
+            template = JINJA_ENVIRONMENT.get_template('error.html')
+            self.response.write(template.render({'error': u"Sorry {0}. You can only play Pizza Blaster once.".format(user.email)}))
+            return
+
         now = datetime.utcnow()
         expiration_date = user.email_date + ONE_HOUR
 
@@ -268,7 +276,6 @@ class PlayPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('play.html')
         self.response.write(template.render({'name': user.name, 'play_id': play_id}))
 
-class PlaySubmitPage(webapp2.RequestHandler):
     def post(self, play_id):
         user = User.query(User.play_id == play_id, User.score == None).get()
 
@@ -276,24 +283,67 @@ class PlaySubmitPage(webapp2.RequestHandler):
             self.redirect('/leaders')
             return
 
-        time = self.request.get('score')
-        score_seconds = timeToSecs(time)
-
-        user.score = score_seconds
+        score = int(self.request.get('input_score'))
+        real_score = int(self.request.get('real_score'))
         user.play_end = datetime.utcnow()
+        liar = False
+
+        time_diff = (user.play_end - user.play_start).total_seconds()
+
+        if score - real_score > 10:
+            liar = True
+
+        if score - time_diff > 10:
+            liar = True
+
+        user.real_score = real_score
+        user.score = score
+        user.liar = liar
+
         user.put()
 
         sleep(0.5)
 
-        self.redirect('/leaders')
+        if liar:
+            self.redirect('/liars')
+        else:
+            self.redirect('/leaders')
+
+# class PlaySubmitPage(webapp2.RequestHandler):
+#     def post(self, play_id):
+#         user = User.query(User.play_id == play_id, User.score == None).get()
+#
+#         if user is None:
+#             self.redirect('/leaders')
+#             return
+#
+#         time = self.request.get('score')
+#         score_seconds = timeToSecs(time)
+#
+#         user.score = score_seconds
+#         user.play_end = datetime.utcnow()
+#         user.put()
+#
+#         sleep(0.5)
+#
+#         self.redirect('/leaders')
 
 class LeadersPage(webapp2.RequestHandler):
     def get(self):
-        users = User.query(User.score > 0).order(-User.score).fetch(20)
+        users = User.query(User.score > 0, User.liar == False).order(-User.score).fetch(100)
 
         render_users = map(userModelToLeaderboardUser, users)
 
         template = JINJA_ENVIRONMENT.get_template('leaders.html')
+        self.response.write(template.render({'users': render_users}))
+
+class LiarsPage(webapp2.RequestHandler):
+    def get(self):
+        users = User.query(User.score > 0, User.liar == True).order(-User.score).fetch(100)
+
+        render_users = map(userModelToLeaderboardUser, users)
+
+        template = JINJA_ENVIRONMENT.get_template('liars.html')
         self.response.write(template.render({'users': render_users}))
 
 
@@ -391,8 +441,9 @@ app = webapp2.WSGIApplication([('/', IndexPage),
                                ('/r/([^/]+)?', VerifyRedirect),
                                ('/go/([^/]+)?', VerifyPage),
                                ('/play/([^/]+)?', PlayPage),
-                               ('/submit/([^/]+)?', PlaySubmitPage),
+                            #    ('/submit/([^/]+)?', PlaySubmitPage),
                                ('/leaders', LeadersPage),
+                               ('/liars', LiarsPage),
                                ('/make_users', MakeUsersPage),
                                ('/send/([^/]+)?', SendPage)
                               ], debug=True)

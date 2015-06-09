@@ -211,3 +211,7 @@ footer {
 .subscribeField {
   width: 100%;
 }
+
+table td, table th {
+  padding: 8px;
+}

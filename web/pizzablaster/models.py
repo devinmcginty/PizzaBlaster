@@ -15,8 +15,11 @@ class User(ndb.Model):
     email_date = ndb.DateTimeProperty()
 
     score = ndb.IntegerProperty()
+    real_score = ndb.IntegerProperty()
     play_start = ndb.DateTimeProperty()
     play_end = ndb.DateTimeProperty()
+
+    liar = ndb.BooleanProperty()
 
 
 class Email(ndb.Model):

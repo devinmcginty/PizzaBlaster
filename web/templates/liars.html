@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Liars{% endblock %}
+
+{% block content %}
+  <h2>Liars</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Name</th>
+        <th>Time</th>
+        <th>Real Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr class="leaderboardItem">
+          <td>{{loop.index}}</td>
+          <td>{{user.name}}</td>
+          <td>{{user.score}}</td>
+          <td>{{user.real_score}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
